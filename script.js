@@ -2,40 +2,11 @@
 const products = [
     {
         id: 1,
-        name: "Pashmina Ceruty Babydoll",
-        price: 35000,
-        image: "https://images.unsplash.com/photo-1589417362098-b8ce77174e90?auto=format&fit=crop&w=500&q=80"
+        name: "Segi Empat Paris",
+        price: 18000,
+        image: "gambar/hijab.jpg"
     },
-    {
-        id: 2,
-        name: "Bella Square Premium",
-        price: 25000,
-        image: "https://images.unsplash.com/photo-1621213233869-7ee4f1a21e42?auto=format&fit=crop&w=500&q=80"
-    },
-    {
-        id: 3,
-        name: "Bergo Maryam Non Pet",
-        price: 40000,
-        image: "https://images.unsplash.com/photo-1589998059171-989d887dda1e?auto=format&fit=crop&w=500&q=80"
-    },
-    {
-        id: 4,
-        name: "Hijab Segiempat Voal",
-        price: 45000,
-        image: "https://images.unsplash.com/photo-1616422201931-1e9d1bf77bb3?auto=format&fit=crop&w=500&q=80"
-    },
-    {
-        id: 5,
-        name: "Pashmina Inner Instan",
-        price: 55000,
-        image: "https://images.unsplash.com/photo-1551698285-d852033c4f74?auto=format&fit=crop&w=500&q=80"
-    },
-    {
-        id: 6,
-        name: "Khimar Syar'i Layer",
-        price: 85000,
-        image: "https://images.unsplash.com/photo-1610419163282-3e288236dcd9?auto=format&fit=crop&w=500&q=80"
-    }
+
 ];
 
 // Cart State
@@ -63,7 +34,33 @@ const formatRupiah = (number) => {
 let currentSelectedProductId = null;
 let currentSelectedColor = null;
 
-const colorsList = ["Peach", "Milo", "Dusty Pink", "Sage", "Cream", "Abu Aspal"];
+const colorsList = [
+    "Soft Milo",
+    "Taupe",
+    "Taro",
+    "Soft Pink",
+    "Nude Pink",
+    "Pink",
+    "Maroon",
+    "Red Wine",
+    "Burgundy",
+    "Baby Blue",
+    "Denim",
+    "Ivory",
+    "Sage",
+    "Oat",
+    "Biskuit",
+    "Espresso",
+    "Hitam",
+    "Putih",
+    "Abu-abu",
+    "Coklat Pramuka",
+    "Coksu",
+    "Coklat Mahogany",
+    "Blue Grey",
+    "Navy",
+    "Mauve"
+];
 
 // Render Products
 function renderProducts() {
@@ -90,7 +87,6 @@ function toggleCart() {
 
 function toggleNav() {
     navLinks.classList.toggle('active');
-    cartOverlay.classList.toggle('active');
 }
 
 function openColorModal(productId) {
@@ -272,10 +268,16 @@ if (closeNavBtn) {
 
 cartOverlay.addEventListener('click', () => {
     cartSidebar.classList.remove('active');
-    if (navLinks) {
-        navLinks.classList.remove('active');
-    }
     cartOverlay.classList.remove('active');
+});
+
+// Close nav when clicking outside
+document.addEventListener('click', (e) => {
+    if (navLinks && navLinks.classList.contains('active')) {
+        if (!navLinks.contains(e.target) && hamburgerBtn && !hamburgerBtn.contains(e.target)) {
+            navLinks.classList.remove('active');
+        }
+    }
 });
 
 // Close nav when clicking a link
