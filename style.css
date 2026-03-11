@@ -798,9 +798,11 @@ b {
 
 .modal-content {
     background: var(--white);
-    padding: 3rem;
+    padding: 2.5rem 2rem;
     max-width: 450px;
     width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
     text-align: center;
     position: relative;
     transform: translateY(20px);
@@ -833,6 +835,56 @@ b {
     border: 1px solid var(--border);
     padding: 15px;
     object-fit: contain;
+}
+
+.user-info-fields {
+    background: #fffafa;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.input-group {
+    margin-bottom: 1.2rem;
+}
+
+.input-group:last-child {
+    margin-bottom: 0;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--gray);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.input-group input,
+.input-group textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--dark);
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+    outline: none;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(217, 125, 129, 0.1);
+}
+
+.input-group textarea {
+    resize: vertical;
+    min-height: 80px;
 }
 
 .payment-note {

@@ -307,8 +307,20 @@
 
             <img src="gambar/qr_kode.jpeg" alt="QR Kode Pembayaran" class="qr-code">
 
-            <p class="payment-note">Silakan scan QR Code di atas untuk melakukan pembayaran. Setelah selesai,
-                konfirmasikan pembayaran Anda melalui WhatsApp dengan menekan tombol di bawah.</p>
+            <p class="payment-note" style="margin-top: 1rem;">Silakan scan QR Code di atas untuk melakukan pembayaran. Setelah selesai,
+                lengkap formulir di bawah ini dan konfirmasikan pembayaran Anda melalui WhatsApp.</p>
+
+            <div class="user-info-fields" style="margin-bottom: 2rem; text-align: left;">
+                <div class="input-group">
+                    <label for="customer-name">Nama Pemesan</label>
+                    <input type="text" id="customer-name" placeholder="Masukkan nama lengkap Anda">
+                </div>
+                <div class="input-group">
+                    <label for="customer-address">Alamat Lengkap</label>
+                    <textarea id="customer-address" placeholder="Masukkan alamat lengkap pengiriman"
+                        rows="3"></textarea>
+                </div>
+            </div>
 
             <button class="btn-confirm" onclick="confirmViaWhatsApp()"
                 style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">

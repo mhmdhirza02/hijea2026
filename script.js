@@ -81,10 +81,10 @@ function renderProducts(filteredProducts = products) {
         const productCard = document.createElement('div');
         productCard.className = 'product-card reveal';
         productCard.style.transitionDelay = `${index * 0.15}s`; // Staggered reveal
-        
+
         const clickAction = product.isBundling ? `addToCartDirectly(${product.id})` : `openColorModal(${product.id})`;
         const badgeHTML = product.badge ? `<div class="product-badge">${product.badge}</div>` : '';
-        
+
         productCard.innerHTML = `
             ${badgeHTML}
             <img src="${product.image}" alt="${product.name}" class="product-img">
@@ -99,7 +99,7 @@ function renderProducts(filteredProducts = products) {
         `;
         productList.appendChild(productCard);
     });
-    
+
     // Initialize reveal animations after products are added
     initRevealAnimations();
 }
@@ -298,23 +298,39 @@ function checkout() {
     cartOverlay.classList.remove('active');
 
     // Tampilkan modal
+    document.getElementById('customer-name').value = '';
+    document.getElementById('customer-address').value = '';
     document.getElementById('payment-modal').classList.add('active');
 }
 
 function confirmViaWhatsApp() {
-    let message = "Halo Admin Hijea, saya sudah melakukan pembayaran untuk tagihan pesanan berikut:\n\n";
-    let total = 0;
+    const name = document.getElementById('customer-name').value.trim();
+    const address = document.getElementById('customer-address').value.trim();
 
+    if (!name || !address) {
+        alert("Silakan lengkapi Nama dan Alamat terlebih dahulu.");
+        return;
+    }
+
+    // Format bersih dan profesional tanpa 'alay'
+    let text = "Halo Admin Hijea, saya ingin konfirmasi pesanan:\n\n";
+    text += "*DATA PEMBELI*\n";
+    text += "Nama: " + name + "\n";
+    text += "Alamat: " + address + "\n\n";
+
+    text += "*DAFTAR ORDER*\n";
+    let total = 0;
     cart.forEach(item => {
-        message += `- ${item.name} (${item.color})\n  ${item.quantity} pcs x ${formatRupiah(item.price)} = ${formatRupiah(item.price * item.quantity)}\n`;
+        text += "- " + item.name + " (" + item.color + ")\n";
+        text += "  " + item.quantity + " pcs x " + formatRupiah(item.price) + "\n";
         total += item.price * item.quantity;
     });
 
-    message += `\nTotal Belanja: *${formatRupiah(total)}*\n\n`;
-    message += "Mohon segera diproses ya. Berikut saya lampirkan juga bukti pembayarannya. Terima kasih!";
+    text += "\n*TOTAL: " + formatRupiah(total) + "*\n\n";
+    text += "Saya akan segera kirim bukti transfer. Terima kasih!";
 
-    const waNumber = "6283870981901"; // Ganti dengan nomor WhatsApp admin yang sebenarnya
-    const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
+    const waNumber = "6283870981901";
+    const waUrl = "https://api.whatsapp.com/send?phone=" + waNumber + "&text=" + encodeURIComponent(text);
 
     window.open(waUrl, '_blank');
 }
@@ -372,7 +388,7 @@ function toggleSearch() {
 
 function handleSearch(e) {
     const searchTerm = e.target.value.toLowerCase();
-    const filtered = products.filter(product => 
+    const filtered = products.filter(product =>
         product.name.toLowerCase().includes(searchTerm)
     );
     renderProducts(filtered);
