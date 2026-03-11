@@ -6,7 +6,15 @@ const products = [
         price: 18000,
         image: "gambar/hijab.jpg"
     },
-
+    {
+        id: 2,
+        name: "Paket Bundling (3 pcs)",
+        price: 50000,
+        originalPrice: 55000,
+        image: "gambar/hjb3.jpg",
+        isBundling: true,
+        badge: "Hemat Rp 5.000"
+    },
 ];
 
 // Cart State
@@ -24,6 +32,10 @@ const cartTotal = document.getElementById('cart-total');
 const hamburgerBtn = document.getElementById('hamburger-btn');
 const closeNavBtn = document.getElementById('close-nav-btn');
 const navLinks = document.getElementById('nav-links');
+const searchBtn = document.getElementById('search-btn');
+const closeSearchBtn = document.getElementById('close-search');
+const searchOverlay = document.getElementById('search-overlay');
+const searchInput = document.getElementById('search-input');
 
 // Format Currency
 const formatRupiah = (number) => {
@@ -63,20 +75,76 @@ const colorsList = [
 ];
 
 // Render Products
-function renderProducts() {
-    products.forEach(product => {
+function renderProducts(filteredProducts = products) {
+    productList.innerHTML = ''; // Clear list before rendering
+    filteredProducts.forEach((product, index) => {
         const productCard = document.createElement('div');
-        productCard.className = 'product-card';
+        productCard.className = 'product-card reveal';
+        productCard.style.transitionDelay = `${index * 0.15}s`; // Staggered reveal
+        
+        const clickAction = product.isBundling ? `addToCartDirectly(${product.id})` : `openColorModal(${product.id})`;
+        const badgeHTML = product.badge ? `<div class="product-badge">${product.badge}</div>` : '';
+        
         productCard.innerHTML = `
+            ${badgeHTML}
             <img src="${product.image}" alt="${product.name}" class="product-img">
             <div class="product-info">
                 <h3 class="product-title">${product.name}</h3>
-                <p class="product-price">${formatRupiah(product.price)}</p>
-                <button class="btn-add" onclick="openColorModal(${product.id})">Tambah ke Keranjang</button>
+                <div class="product-price-container">
+                    ${product.originalPrice ? `<span class="product-price-original">${formatRupiah(product.originalPrice)}</span>` : ''}
+                    <span class="product-price">${formatRupiah(product.price)}</span>
+                </div>
+                <button class="btn-add" onclick="${clickAction}">Tambah ke Keranjang</button>
             </div>
         `;
         productList.appendChild(productCard);
     });
+    
+    // Initialize reveal animations after products are added
+    initRevealAnimations();
+}
+
+function initRevealAnimations() {
+    const reveals = document.querySelectorAll('.reveal');
+    const observerOptions = {
+        threshold: 0.15
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target); // Animasi cuma sekali
+            }
+        });
+    }, observerOptions);
+
+    reveals.forEach(reveal => {
+        observer.observe(reveal);
+    });
+}
+
+function addToCartDirectly(productId) {
+    const product = products.find(p => p.id === productId);
+    const cartId = `${productId}-direct`;
+    const existingItem = cart.find(item => item.cartId === cartId);
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({
+            ...product,
+            cartId: cartId,
+            color: product.isBundling ? "Pilih warna di WA" : "Default",
+            quantity: 1
+        });
+    }
+
+    updateCartUI();
+
+    // Add visual feedback
+    cartBtn.style.transform = 'scale(1.2)';
+    setTimeout(() => cartBtn.style.transform = 'scale(1)', 200);
 }
 
 // Cart Functions
@@ -290,6 +358,37 @@ if (navLinks) {
         });
     });
 }
+
+// Search Functions
+function toggleSearch() {
+    searchOverlay.classList.toggle('active');
+    if (searchOverlay.classList.contains('active')) {
+        setTimeout(() => searchInput.focus(), 300);
+    } else {
+        searchInput.value = '';
+        renderProducts(products); // Reset if closed
+    }
+}
+
+function handleSearch(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const filtered = products.filter(product => 
+        product.name.toLowerCase().includes(searchTerm)
+    );
+    renderProducts(filtered);
+}
+
+// Event Listeners
+if (searchBtn) searchBtn.addEventListener('click', toggleSearch);
+if (closeSearchBtn) closeSearchBtn.addEventListener('click', toggleSearch);
+if (searchInput) searchInput.addEventListener('input', handleSearch);
+
+// Close search on Esc key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && searchOverlay.classList.contains('active')) {
+        toggleSearch();
+    }
+});
 
 document.getElementById('close-payment').addEventListener('click', closePaymentModal);
 document.getElementById('payment-modal').addEventListener('click', (e) => {

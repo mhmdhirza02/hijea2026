@@ -126,7 +126,7 @@ b {
     color: var(--primary);
 }
 
-.cart-icon {
+.cart-icon, .search-icon {
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -136,7 +136,7 @@ b {
     transition: color 0.3s;
 }
 
-.cart-icon:hover {
+.cart-icon:hover, .search-icon:hover {
     color: var(--primary);
 }
 
@@ -230,8 +230,7 @@ b {
 
 
 
-/* Products Section */
-.products {
+ .products {
     padding: 2rem 5% 3rem;
     background-color: var(--white);
 }
@@ -255,8 +254,11 @@ b {
 
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    justify-content: center;
     gap: 4rem 2.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .product-card {
@@ -274,11 +276,44 @@ b {
     width: 100%;
     height: 280px;
     object-fit: cover;
-    transition: box-shadow 0.5s ease;
+    transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .product-card:hover .product-img {
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+    transform: scale(1.05);
+}
+
+/* Product Badge */
+.product-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.product-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background-color: var(--primary);
+    color: white;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+    z-index: 2;
+    box-shadow: 0 4px 10px rgba(217, 125, 129, 0.3);
+}
+
+/* Scroll Animation Styles */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .product-info {
@@ -295,11 +330,25 @@ b {
     margin-bottom: 0.4rem;
 }
 
+.product-price-container {
+    margin-bottom: 0.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+}
+
 .product-price {
     color: var(--gray);
     font-size: 1rem;
-    margin-bottom: 0.8rem;
     letter-spacing: 0.5px;
+}
+
+.product-price-original {
+    text-decoration: line-through;
+    color: #a0a09e;
+    font-size: 0.85rem;
+    font-weight: 300;
 }
 
 .color-options-container {
@@ -586,6 +635,167 @@ b {
     visibility: visible;
 }
 
+/* Search Overlay Redesigned to Dropdown */
+.search-overlay {
+    position: fixed;
+    top: 85px;
+    left: 0;
+    width: 100%;
+    background-color: var(--white);
+    z-index: 90;
+    padding: 1.5rem 5%;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    border-bottom: 1px solid var(--border);
+}
+
+.search-overlay.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.search-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.search-container .close-btn {
+    position: static;
+    order: 2;
+}
+
+.search-box {
+    flex-grow: 1;
+    text-align: left;
+}
+
+#search-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 1.2rem;
+    font-family: var(--font-body);
+    color: var(--dark);
+    text-align: left;
+    padding: 0.5rem 0;
+    outline: none;
+}
+
+#search-input::placeholder {
+    color: var(--gray);
+    opacity: 0.6;
+}
+
+.search-line {
+    width: 100%;
+    height: 1px;
+    background-color: var(--border);
+    transform: scaleX(1);
+    transition: background-color 0.3s;
+}
+
+#search-input:focus + .search-line {
+    background-color: var(--primary);
+}
+
+@media (max-width: 768px) {
+    .search-overlay {
+        top: 70px;
+    }
+    #search-input {
+        font-size: 1rem;
+    }
+}
+
+/* Care Tips Section */
+.care-tips {
+    padding: 6rem 5%;
+    background-color: var(--white);
+}
+
+.care-tips-container {
+    display: flex;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 4rem;
+}
+
+.care-image {
+    flex: 1;
+    overflow: hidden;
+}
+
+.care-image img {
+    width: 100%;
+    height: auto;
+    max-height: 550px;
+    object-fit: cover;
+    border-radius: var(--radius);
+}
+
+.care-info {
+    flex: 1.2;
+}
+
+.care-info h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--dark);
+    line-height: 1.2;
+}
+
+.care-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.care-item {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.care-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.care-item p {
+    font-size: 1.15rem;
+    color: var(--gray);
+    font-weight: 300;
+}
+
+@media (max-width: 991px) {
+    .care-tips-container {
+        flex-direction: column;
+        gap: 3rem;
+    }
+    .care-info h2 {
+        font-size: 2.2rem;
+        text-align: center;
+    }
+    .care-image {
+        width: 100%;
+        max-width: 500px;
+    }
+}
+
 .modal-content {
     background: var(--white);
     padding: 3rem;
@@ -696,10 +906,41 @@ b {
 /* Footer */
 footer {
     text-align: center;
-    padding: 4rem 2rem;
+    padding: 0 0 4rem 0; /* Adjusted padding to accommodate benefits bar */
     background: var(--dark);
     color: var(--white);
 }
+
+.footer-benefits {
+    background-color: #e5dada; /* Light nude/beige background */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 2.5rem 5%;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--dark);
+}
+
+.benefit-item svg {
+    color: var(--dark);
+    opacity: 0.8;
+}
+
+.benefit-item span {
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
 
 .footer-logo {
     font-family: var(--font-heading);
@@ -708,6 +949,16 @@ footer {
     letter-spacing: 2px;
     text-transform: uppercase;
     color: var(--primary);
+}
+
+.footer-social-title {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    color: var(--white);
+    font-weight: 300;
 }
 
 footer p {
